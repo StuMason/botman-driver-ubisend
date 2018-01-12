@@ -1,0 +1,20 @@
+{
+    "name": "joedixon/botman-driver-ubisend",
+    "description": "ubisend driver for BotMan",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joe Dixon",
+            "email": "hello@joedixon.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "botman/botman": "~2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "JoeDixon\\BotManDrivers\\": "src/"
+        }
+    }
+}
