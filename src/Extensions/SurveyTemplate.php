@@ -52,14 +52,6 @@ class SurveyTemplate implements \JsonSerializable
      */
     public function toArray()
     {
-        \Log::info([
-            'type' => 'survey',
-            'message' => [[
-                'text' => $this->text,
-                'responses' => $this->responses,
-            ]],
-        ]);
-
         return [
             'type' => 'survey',
             'message' => [[
