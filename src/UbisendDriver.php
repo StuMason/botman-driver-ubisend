@@ -7,8 +7,10 @@ use Illuminate\Support\Collection;
 use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use Symfony\Component\HttpFoundation\Request;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use JoeDixon\BotManDrivers\Extensions\SurveyTemplate;
 
 class UbisendDriver extends HttpDriver
 {
@@ -95,11 +97,15 @@ class UbisendDriver extends HttpDriver
         if ($message instanceof OutgoingMessage) {
             $parameters['type'] = 'standard';
             $parameters['message'] = [['text' => $message->getText()]];
+        } elseif ($message instanceof Question) {
+            $buttons = Collection::make($message->getButtons())->map(function ($button) {
+                return $button['name'];
+            });
+            $parameters += (new SurveyTemplate($message->getText()))->addResponses($buttons->toArray())->toArray();
         } else {
             $parameters += $message->toArray();
         }
 
-        \Log::info(json_encode($parameters));
         return $parameters;
     }
 
@@ -115,7 +121,6 @@ class UbisendDriver extends HttpDriver
             'Accept: application/json',
         ], true);
 
-        \Log::info($response);
         return $response;
     }
 
@@ -170,6 +175,11 @@ class UbisendDriver extends HttpDriver
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
+        return $this->http->post($this->ubisendEndpoint . $endpoint, [], $parameters, [
+            "Authorization: Bearer {$this->config->get('token')}",
+            'Content-Type: application/json',
+            'Accept: application/json',
+        ], true);
     }
 
     /**
@@ -179,6 +189,6 @@ class UbisendDriver extends HttpDriver
      */
     public function serializesCallbacks()
     {
-        return false;
+        return true;
     }
 }
