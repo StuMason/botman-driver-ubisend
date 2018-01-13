@@ -2,12 +2,14 @@
 
 namespace JoeDixon\BotManDrivers\Extensions;
 
+use JoeDixon\BotManDrivers\Extensions\TemplateTemplate as ListItemTemplate;
+
 class ListTemplate implements \JsonSerializable
 {
     protected $type;
 
     /** @var array */
-    protected $templates = [];
+    protected $items = [];
 
     protected $button;
 
@@ -25,25 +27,25 @@ class ListTemplate implements \JsonSerializable
     }
 
     /**
-     * @param $template
+     * @param $item
      * @return $this
      */
-    public function addTemplate(TemplateTemplate $template)
+    public function addItem(ListItemTemplate $item)
     {
-        $this->templates[] = $template->toTemplateArray();
+        $this->items[] = $item->toTemplateArray();
 
         return $this;
     }
 
     /**
-     * @param array $templates
+     * @param array $items
      * @return $this
      */
-    public function addTemplates(array $templates)
+    public function addItems(array $items)
     {
-        foreach ($templates as $template) {
-            if ($template instanceof TemplateTemplate) {
-                $this->templates[] = $template->toTemplateArray();
+        foreach ($items as $item) {
+            if ($item instanceof ListItemTemplate) {
+                $this->items[] = $item->toTemplateArray();
             }
         }
 
@@ -55,6 +57,7 @@ class ListTemplate implements \JsonSerializable
         $this->button = $button->toArray();
     }
 
+
     /**
      * @return array
      */
@@ -64,7 +67,7 @@ class ListTemplate implements \JsonSerializable
             'type' => 'list template',
             'message' => [[
                 'type' => $this->type,
-                'items' => $this->templates,
+                'items' => $this->items,
             ]]
         ];
     }
