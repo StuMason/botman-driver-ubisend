@@ -16,7 +16,7 @@ class UbisendDriver extends HttpDriver
 {
     const DRIVER_NAME = 'Ubisend';
 
-    protected $ubisendEndpoint = 'http://api.ubisend.test/v1/';
+    protected $ubisendEndpoint = 'https://api.ubisend.com/v1/';
 
     /**
      * Determine if the request is for this driver.
